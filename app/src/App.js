@@ -1,24 +1,16 @@
 import React from 'react';
-import { RouterProvider, createBrowserRouter } from 'react-router';
+import { Routes, Route } from 'react-router-dom';
 import StockList from './StockList';
 import StockDetail from './StockDetail';
 import './App.css';
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <StockList />,
-  },
-  {
-    path: "/stock/:symbol",
-    element: <StockDetail />,  // Remove stockNames prop
-  },
-]);
-
 function App() {
   return (
     <div className="App">
-      <RouterProvider router={router} />
+      <Routes>
+        <Route path="/" element={<StockList />} />
+        <Route path="/stock/:symbol" element={<StockDetail />} />
+      </Routes>
     </div>
   );
 }

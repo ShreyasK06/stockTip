@@ -42,4 +42,3 @@ export const stockNames = [
 ];
 
 export const DEFAULT_SYMBOLS = ['AAPL', 'MSFT', 'GOOGL', 'AMZN', 'META', 'TSLA'];
-

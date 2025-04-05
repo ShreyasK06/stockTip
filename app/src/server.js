@@ -1,13 +1,30 @@
 const OpenAI = require("openai");
-require('dotenv').config();
+const { config, hasValidConfig } = require('./config');
+
+// Check for required API keys
+const checkApiKeys = () => {
+  const missingKeys = [];
+  if (!process.env.REACT_APP_OPENAI_API_KEY) missingKeys.push('REACT_APP_OPENAI_API_KEY');
+  if (!process.env.REACT_APP_FINNHUB_API_KEY) missingKeys.push('REACT_APP_FINNHUB_API_KEY');
+  if (!process.env.REACT_APP_FMP_API_KEY) missingKeys.push('REACT_APP_FMP_API_KEY');
+
+  if (missingKeys.length > 0) {
+    console.warn('Missing API keys:', missingKeys.join(', '));
+    return false;
+  }
+  return true;
+};
+
+const hasApiKeys = checkApiKeys();
 
 const client = new OpenAI({
-  apiKey: process.env.REACT_APP_OPENAI_API_KEY,
+  apiKey: config.openaiApiKey,
   dangerouslyAllowBrowser: true
 });
+
 const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
-api_key.apiKey = process.env.REACT_APP_FINNHUB_API_KEY;
+api_key.apiKey = config.finnhubApiKey;
 const finnhubClient = new finnhub.DefaultApi();
 
 const STORAGE_KEYS = {
@@ -18,7 +35,7 @@ const STORAGE_KEYS = {
   LAST_UPDATE: 'stockTip_lastUpdate'
 };
 
-const FMP_API_KEY = process.env.REACT_APP_FMP_API_KEY;
+const FMP_API_KEY = config.fmpApiKey;
 
 const getFromLocalStorage = (key) => {
   try {
@@ -51,6 +68,11 @@ const saveToLocalStorage = (key, data) => {
 
 const fetchStockData = (symbol) => {
   return new Promise((resolve, reject) => {
+    if (!hasValidConfig()) {
+      reject(new Error('API keys not configured. Please check your environment variables.'));
+      return;
+    }
+
     // First try to get cached data
     const cachedData = getFromLocalStorage(STORAGE_KEYS.STOCK_DATA);
     const cachedStockData = cachedData?.data?.[symbol];
@@ -211,31 +233,28 @@ const getStocks = async (symbols = []) => {
   }
 };
 
-
 const getAIAnalysis = async (symbol, question = '') => {
-  try {
-    const basePrompt = `You are an experienced investment advisor and stock market expert. ${question
-      ? `Please answer this question about ${symbol} stock: ${question}`
-      : `Please provide a brief analysis of ${symbol} stock, focusing on current market position and investment potential.`
-      }`;
+  if (!hasValidConfig()) {
+    throw new Error('API keys not configured. Please check your environment variables.');
+  }
 
-    const response = await client.chat.completions.create({
-      model: "gpt-4",
+  try {
+    const completion = await client.chat.completions.create({
       messages: [
         {
           role: "system",
-          content: "You are an experienced investment advisor. Provide clear, concise advice about stocks and market trends. Focus on practical insights and actionable recommendations. Keep responses professional but conversational, and make it one paragraph long."
+          content: "You are a helpful AI assistant that provides stock market analysis and investment advice."
         },
         {
           role: "user",
-          content: basePrompt
-        },
+          content: `Analyze the stock ${symbol}. ${question}`
+        }
       ],
+      model: "gpt-3.5-turbo",
     });
-
-    return response.choices[0].message.content;
+    return completion.choices[0].message.content;
   } catch (error) {
-    console.error('AI Analysis Error:', error);
+    console.error('OpenAI API Error:', error);
     throw error;
   }
 };
@@ -330,7 +349,6 @@ module.exports = {
   fetchMarketNews,
   searchSymbol,
 };
-
 
 
 

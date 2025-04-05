@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStocks, searchSymbol, fetchCompanyNews, fetchMarketNews } from './server';
 import { stockNames } from './constants';
 import './StockList.css';
-import PersonalizationButton from './components/PersonalizationButton/PersonalizationButton';
+import PersonalizationButton from './Components/PersonalizationButton.js';
 
 const DEFAULT_SYMBOLS = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'NVDA', 'MSFT'];
 
@@ -21,7 +21,7 @@ const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange })
 
   useEffect(() => {
     if (searchQuery) {
-      const filtered = stockNames.filter(stock => 
+      const filtered = stockNames.filter(stock =>
         stock.symbol.toLowerCase().includes(searchQuery.toLowerCase()) ||
         stock.name.toLowerCase().includes(searchQuery.toLowerCase())
       );
@@ -76,7 +76,7 @@ const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange })
             >
               <span className="stock-symbol">{stock.symbol}</span>
               <span className="stock-name">{stock.name}</span>
-              {selectedStocks.includes(stock.symbol) && 
+              {selectedStocks.includes(stock.symbol) &&
                 <span className="selected-indicator">✓</span>
               }
             </div>
@@ -106,12 +106,12 @@ function StockList() {
   const [marketNews, setMarketNews] = useState([]);
   const [showMarketNews, setShowMarketNews] = useState(false);
   const searchRef = useRef(null);
-  
+
   const [selectedStocks, setSelectedStocks] = useState(() => {
     const saved = localStorage.getItem('selectedStocks');
     return saved ? JSON.parse(saved) : DEFAULT_SYMBOLS;
   });
-  
+
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
 
   useEffect(() => {
@@ -280,7 +280,7 @@ function StockList() {
               strokeLinecap="round"
               strokeLinejoin="round"
             >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
           </button>
         </div>
@@ -411,7 +411,6 @@ function StockList() {
 }
 
 export default StockList;
-
 
 
 
