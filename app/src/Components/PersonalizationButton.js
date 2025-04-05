@@ -116,6 +116,20 @@ const PersonalizationButton = () => {
   };
 
   useEffect(() => {
+    const hideButtonTimeout = () => {
+      if (!isModalOpen) {
+        setIsVisible(false);
+      }
+    };
+
+    const showButtonAndResetTimer = () => {
+      setIsVisible(true);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(hideButtonTimeout, 2000);
+    };
+
     let lastScrollY = window.scrollY;
 
     const handleScroll = () => {
@@ -129,17 +143,17 @@ const PersonalizationButton = () => {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    timeoutRef.current = setTimeout(hideButton, 2000);
-    document.addEventListener('mousemove', showButton);
+    timeoutRef.current = setTimeout(hideButtonTimeout, 2000);
+    document.addEventListener('mousemove', showButtonAndResetTimer);
 
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
       window.removeEventListener('scroll', handleScroll);
-      document.removeEventListener('mousemove', showButton);
+      document.removeEventListener('mousemove', showButtonAndResetTimer);
     };
-  }, [hideButton, showButton, isModalOpen]);
+  }, [isModalOpen]);
 
   return (
     <div
