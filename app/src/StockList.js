@@ -118,22 +118,17 @@ function StockList() {
     localStorage.setItem('selectedStocks', JSON.stringify(selectedStocks));
   }, [selectedStocks]);
 
-  const debouncedSearch = useCallback(
-    debounce(async (query) => {
-      if (query.length >= 2) {
-        try {
-          const results = await searchSymbol(query);
-          setSearchResults(results);
-          setShowResults(true);
-        } catch (error) {
+  const debouncedSearch = useCallback((query) => {
+    if (query.length >= 2) {
+      searchSymbol(query)
+        .then(results => {
+          navigate(`/stock/${results[0].symbol}`);
+        })
+        .catch(error => {
           console.error('Search error:', error);
-          setSearchResults([]);
-          setShowResults(false);
-        }
-      }
-    }, 300),
-    []
-  );
+        });
+    }
+  }, [navigate]);
 
   const handleSymbolSelect = (symbol) => {
     setShowResults(false);

@@ -12,11 +12,9 @@ const StockDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const newsData = location.state?.newsData || [];
-  const [aiThinking, setAiThinking] = useState(false);
   const [aiReview, setAiReview] = useState(null);
   const [timeRange, setTimeRange] = useState('24h');
   const [historicalData, setHistoricalData] = useState(null);
-  const [isLoadingHistorical, setIsLoadingHistorical] = useState(false);
   const [showChatbot, setShowChatbot] = useState(false);
   const [messages, setMessages] = useState([
     {
@@ -53,7 +51,7 @@ const StockDetail = () => {
 
     try {
       const aiResponse = await getAIAnalysis(symbol, inputMessage);
-      
+
       setMessages(prev => [...prev, {
         type: 'analysis',
         content: aiResponse,
@@ -92,12 +90,12 @@ const StockDetail = () => {
         setLoading(true);
         // Try to get stock data for the symbol
         const stockResponse = await getStocks([symbol]); // Modified to accept array of symbols
-        
+
         if (!stockResponse[symbol]) {
           setError('Stock not found');
           return;
         }
-        
+
         setStockData(stockResponse[symbol]);
 
         // Check localStorage for cached analysis
@@ -106,7 +104,6 @@ const StockDetail = () => {
         if (isAnalysisCacheValid(cachedAnalysis)) {
           setAiReview(cachedAnalysis.analysis);
         } else {
-          setAiThinking(true);
           // Use the actual company name from the API response if available
           const aiResult = await getAIAnalysis(symbol);
           // Cache the new analysis
@@ -121,7 +118,6 @@ const StockDetail = () => {
         console.error(err);
       } finally {
         setLoading(false);
-        setAiThinking(false);
       }
     };
 
@@ -139,7 +135,7 @@ const StockDetail = () => {
           <h3>Market Analysis</h3>
           <div className="ai-controls">
             <span className="model-badge">AI Insights</span>
-            <button 
+            <button
               className="ask-ai-button"
               onClick={() => setShowChatbot(true)}
             >
@@ -159,7 +155,7 @@ const StockDetail = () => {
                   <h3>Investment Advisor</h3>
                   <span className="stock-badge">{symbol}</span>
                 </div>
-                <button 
+                <button
                   className="close-chatbot"
                   onClick={() => setShowChatbot(false)}
                 >
@@ -334,8 +330,6 @@ const StockDetail = () => {
         return;
       }
 
-      setIsLoadingHistorical(true);
-      
       try {
         // Check localStorage for cached historical data
         const cacheKey = `historical_${symbol}_${timeRange}`;
@@ -343,7 +337,6 @@ const StockDetail = () => {
 
         if (isHistoricalDataCacheValid(cachedData)) {
           setHistoricalData(cachedData.data);
-          setIsLoadingHistorical(false);
           return;
         }
 
@@ -358,8 +351,6 @@ const StockDetail = () => {
 
       } catch (error) {
         console.error('Error loading historical data:', error);
-      } finally {
-        setIsLoadingHistorical(false);
       }
     };
 
@@ -380,7 +371,7 @@ const StockDetail = () => {
         <button className="back-button" onClick={() => navigate('/')}>
           ← Back
         </button>
-        
+
         <div className="time-range-toggle">
           <button
             className={`time-range-button ${timeRange === '24h' ? 'active' : ''}`}

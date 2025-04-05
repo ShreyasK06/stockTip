@@ -68,13 +68,13 @@ const PersonalizationButton = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [isButtonVisible, setIsButtonVisible] = useState(true);
   const timeoutRef = useRef(null);
-  
+
   // Initialize from localStorage with fallbacks
-  const [themeColor, setThemeColor] = useState(() => 
+  const [themeColor, setThemeColor] = useState(() =>
     localStorage.getItem('themeColor') || 'blue'
   );
-  
-  const [isDarkMode, setIsDarkMode] = useState(() => 
+
+  const [isDarkMode, setIsDarkMode] = useState(() =>
     localStorage.getItem('isDarkMode') === 'true'
   );
 
@@ -82,10 +82,10 @@ const PersonalizationButton = () => {
   useEffect(() => {
     const savedThemeColor = localStorage.getItem('themeColor') || 'blue';
     const savedDarkMode = localStorage.getItem('isDarkMode') === 'true';
-    
+
     setThemeColor(savedThemeColor);
     setIsDarkMode(savedDarkMode);
-    
+
     // Apply the saved theme
     document.body.className = savedDarkMode ? 'dark-theme' : 'light-theme';
     document.documentElement.style.setProperty('--primary-color', getThemeColor(savedThemeColor));
@@ -139,10 +139,10 @@ const PersonalizationButton = () => {
       window.removeEventListener('scroll', handleScroll);
       document.removeEventListener('mousemove', showButton);
     };
-  }, [isModalOpen]);
+  }, [hideButton, showButton, isModalOpen]);
 
   return (
-    <div 
+    <div
       className={`personalization-wrapper ${isVisible ? 'visible' : 'hidden'} ${isButtonVisible ? 'visible' : 'hidden'}`}
       onMouseEnter={showButton}
     >
@@ -153,8 +153,8 @@ const PersonalizationButton = () => {
         aria-label="Open personalization settings"
         style={{ borderColor: `${getThemeColor(themeColor)}40` }}
       >
-        <FaCog 
-          size={20} 
+        <FaCog
+          size={20}
           style={{ color: getThemeColor(themeColor) }}
         />
       </button>

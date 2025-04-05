@@ -1,22 +1,6 @@
 const OpenAI = require("openai");
 const { config, hasValidConfig } = require('./config');
 
-// Check for required API keys
-const checkApiKeys = () => {
-  const missingKeys = [];
-  if (!process.env.REACT_APP_OPENAI_API_KEY) missingKeys.push('REACT_APP_OPENAI_API_KEY');
-  if (!process.env.REACT_APP_FINNHUB_API_KEY) missingKeys.push('REACT_APP_FINNHUB_API_KEY');
-  if (!process.env.REACT_APP_FMP_API_KEY) missingKeys.push('REACT_APP_FMP_API_KEY');
-
-  if (missingKeys.length > 0) {
-    console.warn('Missing API keys:', missingKeys.join(', '));
-    return false;
-  }
-  return true;
-};
-
-const hasApiKeys = checkApiKeys();
-
 const client = new OpenAI({
   apiKey: config.openaiApiKey,
   dangerouslyAllowBrowser: true
