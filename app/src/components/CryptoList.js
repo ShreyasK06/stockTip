@@ -141,8 +141,8 @@ const CryptoList = () => {
 
     fetchCryptoData();
 
-    // Refresh data every 60 seconds
-    const interval = setInterval(fetchCryptoData, 60000);
+    // Refresh data every 5 seconds
+    const interval = setInterval(fetchCryptoData, 5000);
 
     return () => clearInterval(interval);
   }, [selectedCryptos, generateMockCryptoData]);

@@ -21,14 +21,14 @@ const CryptoExchangeRates = () => {
     const fetchCryptoRates = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch exchange rates for all cryptocurrencies in parallel
-        const ratesPromises = cryptos.map(crypto => 
+        const ratesPromises = cryptos.map(crypto =>
           getCryptoExchangeRate(crypto.symbol, 'USD')
         );
-        
+
         const results = await Promise.all(ratesPromises);
-        
+
         // Process and store the results
         const ratesData = {};
         results.forEach((result, index) => {
@@ -42,7 +42,7 @@ const CryptoExchangeRates = () => {
             };
           }
         });
-        
+
         setCryptoRates(ratesData);
         setError(null);
       } catch (err) {
@@ -54,10 +54,10 @@ const CryptoExchangeRates = () => {
     };
 
     fetchCryptoRates();
-    
-    // Refresh rates every 5 minutes
-    const intervalId = setInterval(fetchCryptoRates, 5 * 60 * 1000);
-    
+
+    // Refresh rates every 5 seconds
+    const intervalId = setInterval(fetchCryptoRates, 5000);
+
     return () => clearInterval(intervalId);
   }, []);
 
@@ -75,12 +75,12 @@ const CryptoExchangeRates = () => {
         <FaBitcoin className="section-icon" />
         <h3>Cryptocurrency Exchange Rates</h3>
       </div>
-      
+
       <div className="crypto-content">
         <div className="crypto-rates-grid">
           {cryptos.map(crypto => {
             const rateData = cryptoRates[crypto.symbol];
-            
+
             if (!rateData) {
               return (
                 <div key={crypto.symbol} className="crypto-card loading">
@@ -90,15 +90,15 @@ const CryptoExchangeRates = () => {
                 </div>
               );
             }
-            
+
             const rate = parseFloat(rateData.rate);
-            
+
             return (
               <div key={crypto.symbol} className="crypto-card">
                 <div className="crypto-icon">{crypto.icon}</div>
                 <div className="crypto-name">{crypto.name}</div>
                 <div className="crypto-rate">
-                  <FaDollarSign /> {rate.toLocaleString(undefined, { 
+                  <FaDollarSign /> {rate.toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: rate > 100 ? 2 : 4
                   })}
@@ -107,11 +107,11 @@ const CryptoExchangeRates = () => {
                   Last updated: {new Date(rateData.lastUpdated).toLocaleTimeString()}
                 </div>
                 <div className="crypto-bid-ask">
-                  <div className="crypto-bid">Bid: ${parseFloat(rateData.bidPrice).toLocaleString(undefined, { 
+                  <div className="crypto-bid">Bid: ${parseFloat(rateData.bidPrice).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: rate > 100 ? 2 : 4
                   })}</div>
-                  <div className="crypto-ask">Ask: ${parseFloat(rateData.askPrice).toLocaleString(undefined, { 
+                  <div className="crypto-ask">Ask: ${parseFloat(rateData.askPrice).toLocaleString(undefined, {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: rate > 100 ? 2 : 4
                   })}</div>
@@ -121,7 +121,7 @@ const CryptoExchangeRates = () => {
           })}
         </div>
       </div>
-      
+
       <div className="crypto-footer">
         <div className="crypto-disclaimer">
           <FaExchangeAlt className="disclaimer-icon" />

@@ -403,6 +403,23 @@ function StockDetail() {
     };
 
     fetchAllData();
+
+    // Set up auto-refresh every 5 seconds
+    const refreshInterval = setInterval(() => {
+      // Only refresh stock data, not news or AI analysis
+      getStockData(symbol).then(stockDetails => {
+        setStockData(stockDetails);
+      }).catch(err => {
+        console.error("Error refreshing stock data:", err);
+      });
+
+      // Also refresh chart data
+      fetchRangeData(chartTimeRange).catch(err => {
+        console.error("Error refreshing chart data:", err);
+      });
+    }, 5000);
+
+    return () => clearInterval(refreshInterval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [symbol, chartTimeRange]);
 

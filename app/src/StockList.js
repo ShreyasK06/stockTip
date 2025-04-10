@@ -42,8 +42,8 @@ function StockList() {
   useEffect(() => {
     fetchStockData();
 
-    // Refresh data every 60 seconds
-    const interval = setInterval(fetchStockData, 60000);
+    // Refresh data every 5 seconds
+    const interval = setInterval(fetchStockData, 5000);
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
