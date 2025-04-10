@@ -1,7 +1,6 @@
 import { OpenAI } from "openai";
 import { config } from './config';
-import finnhub from 'finnhub';
-import { getMockStockData, getMockNewsData, getMockMarketNews, getMockHistoricalData, getMockAIAnalysis, getMockCryptoData } from './mockDataService';
+import * as finnhub from 'finnhub';
 
 const client = new OpenAI({
   apiKey: config.openaiApiKey,
@@ -63,15 +62,10 @@ const fetchStockData = (symbol) => {
       return;
     }
 
-    // If API key is missing, use mock data
+    // If API key is missing, return error
     if (!config.finnhubApiKey) {
-      console.warn('Finnhub API key is missing. Using mock stock data.');
-      const mockData = getMockStockData(symbol);
-      if (mockData) {
-        resolve({ ...mockData, symbol, fromMock: true });
-      } else {
-        reject(new Error('No API key and no mock data available for this symbol'));
-      }
+      console.warn('Finnhub API key is missing. Please add your API key.');
+      reject(new Error('Finnhub API key is missing. Please add your API key.'));
       return;
     }
 
@@ -114,11 +108,10 @@ const fetchCompanyNews = (symbol) => {
     const cachedData = getFromLocalStorage(STORAGE_KEYS.NEWS_DATA);
     const cachedNewsData = cachedData?.data?.[symbol];
 
-    // If API key is missing, use mock data
+    // If API key is missing, return error
     if (!config.finnhubApiKey) {
-      console.warn('Finnhub API key is missing. Using mock news data.');
-      const mockData = getMockNewsData(symbol);
-      resolve(mockData || []);
+      console.warn('Finnhub API key is missing. Please add your API key.');
+      reject(new Error('Finnhub API key is missing. Please add your API key.'));
       return;
     }
 
@@ -234,13 +227,11 @@ const getStocks = async (symbols = []) => {
   }
 };
 
-// Use mock data service for AI analysis
-
 const getAIAnalysis = async (symbol) => {
-  // If OpenAI API key is missing, use mock data
+  // If OpenAI API key is missing, return error message
   if (!config.openaiApiKey) {
-    console.warn('OpenAI API key is missing. Using mock AI analysis data.');
-    return getMockAIAnalysis(symbol);
+    console.warn('OpenAI API key is missing. Please add your API key.');
+    return "AI analysis is not available. Please add your OpenAI API key.";
   }
 
   try {
@@ -273,11 +264,10 @@ const fetchMarketNews = () => {
       return;
     }
 
-    // If API key is missing, use mock data
+    // If API key is missing, return empty array
     if (!config.finnhubApiKey) {
-      console.warn('Finnhub API key is missing. Using mock market news data.');
-      const mockData = getMockMarketNews();
-      resolve({ data: mockData, fromMock: true });
+      console.warn('Finnhub API key is missing. Please add your API key.');
+      resolve({ data: [], error: 'Finnhub API key is missing. Please add your API key.' });
       return;
     }
 

@@ -1,12 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 // No need for navigation or icons for now
 import '../styles/CryptoCard.css';
-
-// Mock function for getCryptoExchangeRate if the real one is not available
-const getCryptoExchangeRate = async (fromCurrency, toCurrency) => {
-  console.log(`Mock getCryptoExchangeRate called for ${fromCurrency} to ${toCurrency}`);
-  throw new Error('API not available - using mock data');
-};
+import { getCryptoExchangeRate } from '../services/alphaVantageService';
 
 // Default cryptocurrencies to display
 const DEFAULT_CRYPTOS = ['BTC', 'ETH', 'SOL', 'ADA', 'DOT'];
