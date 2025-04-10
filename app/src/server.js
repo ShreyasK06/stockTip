@@ -1,5 +1,6 @@
-const OpenAI = require("openai");
-const { config } = require('./config');
+import { OpenAI } from "openai";
+import { config } from './config';
+import finnhub from 'finnhub';
 import { getMockStockData, getMockNewsData, getMockMarketNews, getMockHistoricalData, getMockAIAnalysis, getMockCryptoData } from './mockDataService';
 
 const client = new OpenAI({
@@ -7,7 +8,6 @@ const client = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
-const finnhub = require('finnhub');
 const api_key = finnhub.ApiClient.instance.authentications['api_key'];
 api_key.apiKey = config.finnhubApiKey;
 const finnhubClient = new finnhub.DefaultApi();
@@ -373,7 +373,7 @@ const searchSymbol = async (query) => {
   }
 };
 
-module.exports = {
+export {
   getStocks,
   fetchCompanyNews,
   fetchHistoricalData,
