@@ -1,5 +1,6 @@
 const OpenAI = require("openai");
-const { config, hasValidConfig } = require('./config');
+const { config } = require('./config');
+import { getMockStockData, getMockNewsData, getMockMarketNews, getMockHistoricalData, getMockAIAnalysis, getMockCryptoData } from './mockDataService';
 
 const client = new OpenAI({
   apiKey: config.openaiApiKey,
@@ -52,11 +53,6 @@ const saveToLocalStorage = (key, data) => {
 
 const fetchStockData = (symbol) => {
   return new Promise((resolve, reject) => {
-    if (!hasValidConfig()) {
-      reject(new Error('API keys not configured. Please check your environment variables.'));
-      return;
-    }
-
     // First try to get cached data
     const cachedData = getFromLocalStorage(STORAGE_KEYS.STOCK_DATA);
     const cachedStockData = cachedData?.data?.[symbol];
@@ -64,6 +60,19 @@ const fetchStockData = (symbol) => {
     // If we have cached data, use it immediately
     if (cachedStockData) {
       resolve({ ...cachedStockData, symbol, fromCache: true });
+      return;
+    }
+
+    // If API key is missing, use mock data
+    if (!config.finnhubApiKey) {
+      console.warn('Finnhub API key is missing. Using mock stock data.');
+      const mockData = getMockStockData(symbol);
+      if (mockData) {
+        resolve({ ...mockData, symbol, fromMock: true });
+      } else {
+        reject(new Error('No API key and no mock data available for this symbol'));
+      }
+      return;
     }
 
     // Then try to fetch fresh data
@@ -104,6 +113,14 @@ const fetchCompanyNews = (symbol) => {
     // Try to get cached data
     const cachedData = getFromLocalStorage(STORAGE_KEYS.NEWS_DATA);
     const cachedNewsData = cachedData?.data?.[symbol];
+
+    // If API key is missing, use mock data
+    if (!config.finnhubApiKey) {
+      console.warn('Finnhub API key is missing. Using mock news data.');
+      const mockData = getMockNewsData(symbol);
+      resolve(mockData || []);
+      return;
+    }
 
     finnhubClient.companyNews(symbol, from, to, (error, data, response) => {
       if (error) {
@@ -217,9 +234,13 @@ const getStocks = async (symbols = []) => {
   }
 };
 
+// Use mock data service for AI analysis
+
 const getAIAnalysis = async (symbol) => {
-  if (!hasValidConfig()) {
-    throw new Error('API keys not configured. Please check your environment variables.');
+  // If OpenAI API key is missing, use mock data
+  if (!config.openaiApiKey) {
+    console.warn('OpenAI API key is missing. Using mock AI analysis data.');
+    return getMockAIAnalysis(symbol);
   }
 
   try {
@@ -249,6 +270,15 @@ const fetchMarketNews = () => {
     const cachedData = getFromLocalStorage(STORAGE_KEYS.MARKET_NEWS);
     if (cachedData?.data) {
       resolve({ data: cachedData.data, fromCache: true });
+      return;
+    }
+
+    // If API key is missing, use mock data
+    if (!config.finnhubApiKey) {
+      console.warn('Finnhub API key is missing. Using mock market news data.');
+      const mockData = getMockMarketNews();
+      resolve({ data: mockData, fromMock: true });
+      return;
     }
 
     finnhubClient.marketNews("general", {}, (error, data, response) => {
@@ -276,6 +306,24 @@ const searchSymbol = async (query) => {
     const cachedResults = getFromLocalStorage(cacheKey);
     if (cachedResults?.data) {
       return cachedResults.data;
+    }
+
+    // If API key is missing, return default results
+    if (!config.finnhubApiKey) {
+      console.warn('Finnhub API key is missing. Using default symbol search results.');
+      // Return a basic set of symbols that match common queries
+      return {
+        result: [
+          { symbol: 'AAPL', description: 'Apple Inc.', type: 'Common Stock' },
+          { symbol: 'MSFT', description: 'Microsoft Corporation', type: 'Common Stock' },
+          { symbol: 'GOOGL', description: 'Alphabet Inc.', type: 'Common Stock' },
+          { symbol: 'AMZN', description: 'Amazon.com Inc.', type: 'Common Stock' },
+          { symbol: 'TSLA', description: 'Tesla Inc.', type: 'Common Stock' },
+          { symbol: 'META', description: 'Meta Platforms Inc.', type: 'Common Stock' },
+          { symbol: 'NFLX', description: 'Netflix Inc.', type: 'Common Stock' },
+          { symbol: 'NVDA', description: 'NVIDIA Corporation', type: 'Common Stock' }
+        ]
+      };
     }
 
     // If no cache, make API request with retry logic
