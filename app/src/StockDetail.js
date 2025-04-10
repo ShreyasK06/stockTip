@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getStocks, fetchCompanyNews, fetchHistoricalData, getAIAnalysis } from './server';
-import { getFromLocalStorage, saveToLocalStorage } from './utils';
+import { getFromLocalStorage, saveToLocalStorage, checkMarketStatus } from './utils';
 import { stockNames } from './constants';
 import { ThemeContext } from './App';
 import './styles/PersonalizationButton.css';
@@ -30,6 +30,7 @@ function StockDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [aiAnalysis, setAiAnalysis] = useState('');
+  const [marketStatus, setMarketStatus] = useState({ isOpen: false, status: 'Checking...', nextEvent: '' });
   const [rangeData, setRangeData] = useState({
     high: 0,
     low: 0,
@@ -402,26 +403,55 @@ function StockDetail() {
       }
     };
 
+    // Effect to check market status
+    const checkStatus = () => {
+      const status = checkMarketStatus();
+      setMarketStatus(status);
+    };
+
+    checkStatus();
+
+    // Update market status every minute
+    const statusInterval = setInterval(checkStatus, 60000);
+
     fetchAllData();
 
-    // Set up auto-refresh every 5 seconds
-    const refreshInterval = setInterval(() => {
-      // Only refresh stock data, not news or AI analysis
-      getStockData(symbol).then(stockDetails => {
-        setStockData(stockDetails);
-      }).catch(err => {
-        console.error("Error refreshing stock data:", err);
-      });
+    // Set up auto-refresh
+    let refreshInterval;
 
-      // Also refresh chart data
-      fetchRangeData(chartTimeRange).catch(err => {
-        console.error("Error refreshing chart data:", err);
-      });
-    }, 5000);
+    if (marketStatus.isOpen) {
+      // If market is open, refresh every 5 seconds
+      refreshInterval = setInterval(() => {
+        // Only refresh stock data, not news or AI analysis
+        getStockData(symbol).then(stockDetails => {
+          setStockData(stockDetails);
+        }).catch(err => {
+          console.error("Error refreshing stock data:", err);
+        });
 
-    return () => clearInterval(refreshInterval);
+        // Also refresh chart data
+        fetchRangeData(chartTimeRange).catch(err => {
+          console.error("Error refreshing chart data:", err);
+        });
+      }, 5000);
+    } else {
+      // If market is closed, refresh every 5 minutes
+      refreshInterval = setInterval(() => {
+        // Only refresh stock data, not news or AI analysis
+        getStockData(symbol).then(stockDetails => {
+          setStockData(stockDetails);
+        }).catch(err => {
+          console.error("Error refreshing stock data:", err);
+        });
+      }, 300000);
+    }
+
+    return () => {
+      clearInterval(statusInterval);
+      clearInterval(refreshInterval);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [symbol, chartTimeRange]);
+  }, [symbol, chartTimeRange, marketStatus.isOpen]);
 
   const handleTimeRangeChange = (direction) => {
     const ranges = ['1d', '1w', '1m'];
@@ -490,6 +520,12 @@ function StockDetail() {
 
       <div className="stock-detail-content">
         <h2 id="price" className="section-title">Price Information</h2>
+        <div className="market-status-indicator">
+          <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>
+            Market: {marketStatus.status}
+          </span>
+          <span className="next-event"> • {marketStatus.nextEvent}</span>
+        </div>
         <div className="current-price-section">
           <div className="current-price">
             <h2>${isFinite(stockData.currentPrice) ? stockData.currentPrice.toFixed(2) : '0.00'}</h2>

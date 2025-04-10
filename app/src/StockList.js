@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getStocks } from './server';
 import { stockNames } from './constants';
 import { ThemeContext } from './App';
+import { checkMarketStatus } from './utils';
 import './styles/StockView.css';
 import './styles/StockSelector.css';
 import './styles/StockCard.css';
@@ -17,6 +18,7 @@ function StockList() {
   const [stocksData, setStocksData] = useState({});
   const [isGridView, setIsGridView] = useState(false);
   const [lastUpdate, setLastUpdate] = useState('');
+  const [marketStatus, setMarketStatus] = useState({ isOpen: false, status: 'Checking...', nextEvent: '' });
 
   const [selectedStocks, setSelectedStocks] = useState(() => {
     const saved = localStorage.getItem('selectedStocks');
@@ -39,15 +41,40 @@ function StockList() {
     }
   };
 
+  // Effect to check market status
   useEffect(() => {
+    // Check market status immediately
+    const checkStatus = () => {
+      const status = checkMarketStatus();
+      setMarketStatus(status);
+    };
+
+    checkStatus();
+
+    // Update market status every minute
+    const statusInterval = setInterval(checkStatus, 60000);
+
+    return () => clearInterval(statusInterval);
+  }, []);
+
+  // Effect to fetch stock data
+  useEffect(() => {
+    // Initial fetch regardless of market status
     fetchStockData();
 
-    // Refresh data every 5 seconds
-    const interval = setInterval(fetchStockData, 5000);
+    // Set up refresh interval
+    let interval;
+    if (marketStatus.isOpen) {
+      // If market is open, refresh every 5 seconds
+      interval = setInterval(fetchStockData, 5000);
+    } else {
+      // If market is closed, refresh every 5 minutes
+      interval = setInterval(fetchStockData, 300000);
+    }
 
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedStocks]);
+  }, [selectedStocks, marketStatus.isOpen]);
 
   const handleStockClick = (symbol) => {
     navigate(`/stock/${symbol}`);
@@ -154,6 +181,10 @@ function StockList() {
         </h1>
         <div className="controls">
           <div className="status-container">
+            <p className="market-status">
+              Market Status: <span className={marketStatus.isOpen ? 'status-open' : 'status-closed'}>{marketStatus.status}</span>
+              <span className="next-event"> • {marketStatus.nextEvent}</span>
+            </p>
             <p className="last-update">
               Last Updated: {lastUpdate}
             </p>
