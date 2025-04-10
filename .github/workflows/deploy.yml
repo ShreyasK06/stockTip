@@ -25,16 +25,20 @@ jobs:
       - name: Create .env file
         working-directory: app
         run: |
-          echo "REACT_APP_OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> .env
-          echo "REACT_APP_ALPHA_VANTAGE_API_KEY=${{ secrets.ALPHA_VANTAGE_API_KEY }}" >> .env
+          echo "REACT_APP_FINNHUB_API_KEY=${{ secrets.REACT_APP_FINNHUB_API_KEY }}" >> .env
+          echo "REACT_APP_FMP_API_KEY=${{ secrets.REACT_APP_FMP_API_KEY }}" >> .env
+          echo "REACT_APP_OPENAI_API_KEY=${{ secrets.REACT_APP_OPENAI_API_KEY }}" >> .env
+          echo "REACT_APP_ALPHA_VANTAGE_API_KEY=${{ secrets.REACT_APP_ALPHA_VANTAGE_API_KEY }}" >> .env
           echo "PUBLIC_URL=/stockTip" >> .env
 
       - name: Build
         working-directory: app
+        env:
+          CI: false
         run: npm run build
 
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: gh-pages
-          folder: app/build 
+          folder: app/build
