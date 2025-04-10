@@ -2,6 +2,14 @@
 
 A comprehensive stock market dashboard with real-time data, economic indicators, and cryptocurrency tracking. This project uses various financial APIs to provide up-to-date market information.
 
+## Features
+
+- Real-time stock data
+- Economic indicators
+- Cryptocurrency tracking
+- Market news
+- AI-powered stock analysis
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
