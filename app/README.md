@@ -1,4 +1,6 @@
-# Getting Started with Create React App
+# StockTip - Stock Market Dashboard
+
+A comprehensive stock market dashboard with real-time data, economic indicators, and cryptocurrency tracking. This project uses various financial APIs to provide up-to-date market information.
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
