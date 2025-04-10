@@ -1,0 +1,192 @@
+/* Crypto Cards Section Styles */
+.crypto-cards-section {
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  transition: all var(--transition-speed) ease;
+}
+
+/* News Section Styles */
+.crypto-news-section {
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  transition: all var(--transition-speed) ease;
+}
+
+.news-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.news-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.section-icon {
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 500px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.news-item {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.news-item h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.news-item p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.news-item a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.news-item a:hover {
+  text-decoration: underline;
+  transform: translateX(3px);
+}
+
+/* Scrollbar styling */
+.news-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-list::-webkit-scrollbar-track {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: 10px;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 10px;
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+/* AI Insight Section */
+.crypto-analysis-section {
+  width: 100%;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  transition: all var(--transition-speed) ease;
+}
+
+.ai-insight-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.ai-insight-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.ai-insight-content {
+  padding: 0.5rem;
+}
+
+.ai-insight-content p {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 768px) {
+  .crypto-cards-section,
+  .crypto-news-section,
+  .crypto-analysis-section {
+    padding: 1rem;
+  }
+  
+  .news-header h3,
+  .ai-insight-header h3 {
+    font-size: 1.1rem;
+  }
+  
+  .news-item {
+    padding: 1rem;
+  }
+  
+  .news-item h4 {
+    font-size: 1rem;
+  }
+  
+  .news-item p {
+    font-size: 0.9rem;
+  }
+}

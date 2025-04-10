@@ -13,8 +13,6 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #282c34;
-  color: white;
 }
 
 /* Set code font */
@@ -64,12 +62,6 @@ button {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
-}
-
-/* Prevent text selection on interactive elements */
-button, 
-.stock-card {
-  user-select: none;
 }
 
 /* Ensure images don't overflow their containers */

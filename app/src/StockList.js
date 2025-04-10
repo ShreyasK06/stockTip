@@ -1,19 +1,220 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getStocks, searchSymbol, fetchCompanyNews, fetchMarketNews } from './server';
+import { getStocks } from './server';
 import { stockNames } from './constants';
-import './StockList.css';
-import PersonalizationButton from './Components/PersonalizationButton.js';
+import { ThemeContext } from './App';
+import './styles/StockView.css';
+import './styles/StockSelector.css';
+import './styles/StockCard.css';
+import './styles/GridView.css';
+import './styles/ListView.css';
+import './styles/PersonalizationButton.css';
 
 const DEFAULT_SYMBOLS = ['AAPL', 'GOOGL', 'TSLA', 'AMZN', 'NVDA', 'MSFT'];
 
-const debounce = (func, wait) => {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => func(...args), wait);
+function StockList() {
+  const navigate = useNavigate();
+  const [stocksData, setStocksData] = useState({});
+  const [isGridView, setIsGridView] = useState(false);
+  const [lastUpdate, setLastUpdate] = useState('');
+
+  const [selectedStocks, setSelectedStocks] = useState(() => {
+    const saved = localStorage.getItem('selectedStocks');
+    return saved ? JSON.parse(saved) : DEFAULT_SYMBOLS;
+  });
+
+  const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('selectedStocks', JSON.stringify(selectedStocks));
+  }, [selectedStocks]);
+
+  const fetchStockData = async () => {
+    try {
+      const data = await getStocks(selectedStocks);
+      setStocksData(data || {});
+      setLastUpdate(new Date().toLocaleTimeString());
+    } catch (error) {
+      console.error('Error fetching stock data:', error);
+    }
   };
-};
+
+  useEffect(() => {
+    fetchStockData();
+
+    // Refresh data every 60 seconds
+    const interval = setInterval(fetchStockData, 60000);
+
+    return () => clearInterval(interval);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedStocks]);
+
+  const handleStockClick = (symbol) => {
+    navigate(`/stock/${symbol}`);
+  };
+
+  const renderStockCards = () => {
+    return selectedStocks.map(symbol => {
+      const stock = stocksData[symbol] || {};
+      const isPositive = stock.c >= 0;
+      const stockInfo = stockNames.find(s => s.symbol === symbol) || { symbol, name: symbol };
+
+      return (
+        <div
+          key={symbol}
+          className="stock-card"
+          onClick={() => handleStockClick(symbol)}
+        >
+          {isGridView ? (
+            <>
+              <div className="stock-card-header">
+                <div className="stock-symbol">{symbol}</div>
+                <div className="stock-name">{stockInfo.name}</div>
+              </div>
+              <div className="price-section">
+                <div className="current-price">
+                  ${stock.c ? stock.c.toFixed(2) : '0.00'}
+                </div>
+                <div className={`price-change ${isPositive ? 'positive' : 'negative'}`}>
+                  ${stock.d ? Math.abs(stock.d).toFixed(2) : '0.00'}
+                </div>
+              </div>
+              <div className="price-extremes">
+                <div className="price-extreme-item">
+                  <span className="extreme-label">Low</span>
+                  <span className="extreme-value">${stock.l ? stock.l.toFixed(2) : '0.00'}</span>
+                </div>
+                <div className="price-extreme-item">
+                  <span className="extreme-label">High</span>
+                  <span className="extreme-value">${stock.h ? stock.h.toFixed(2) : '0.00'}</span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div className="stock-info">
+                <span className="stock-symbol">{symbol}</span>
+                <span className="stock-name">{stockInfo.name}</span>
+              </div>
+              <div className="current-price">
+                ${stock.c ? stock.c.toFixed(2) : '0.00'}
+              </div>
+              <div className={`price-change ${isPositive ? 'positive' : 'negative'}`}>
+                ${stock.d ? Math.abs(stock.d).toFixed(2) : '0.00'}
+              </div>
+              <div className="extreme-value">
+                ${stock.l ? stock.l.toFixed(2) : '0.00'}
+              </div>
+              <div className="extreme-value">
+                ${stock.h ? stock.h.toFixed(2) : '0.00'}
+              </div>
+            </>
+          )}
+        </div>
+      );
+    });
+  };
+
+  // Theme toggle button component
+  const ThemeToggleButton = () => {
+    const { isDarkMode, updateAppTheme } = useContext(ThemeContext);
+
+    const toggleTheme = () => {
+      updateAppTheme('blue', !isDarkMode);
+    };
+
+    return (
+      <div className="theme-toggle-wrapper">
+        <button
+          className={`theme-toggle-button ${isDarkMode ? 'dark' : 'light'}`}
+          onClick={toggleTheme}
+          aria-label="Toggle dark/light mode"
+        >
+          <div className="toggle-track">
+            <div className="toggle-indicator">
+              <span className="toggle-icon">
+                {isDarkMode ? '🌙' : '☀️'}
+              </span>
+            </div>
+          </div>
+        </button>
+      </div>
+    );
+  };
+
+  return (
+    <div className="app-container">
+      <ThemeToggleButton />
+
+      <header className="App-header">
+        <h1>
+          <span onClick={() => window.location.href = "https://shreyask06.github.io/MyWebsite/"}>
+            Stock Market View
+          </span>
+        </h1>
+        <div className="controls">
+          <div className="status-container">
+            <p className="last-update">
+              Last Updated: {lastUpdate}
+            </p>
+          </div>
+          <div className="buttons-container">
+            {/* Market News button removed - now in Economic Data page */}
+            <button
+              className="economic-data-button"
+              onClick={() => navigate('/economic-data')}
+            >
+              Economic Data
+            </button>
+            <button
+              className="crypto-data-button"
+              onClick={() => navigate('/crypto-data')}
+            >
+              Crypto Data
+            </button>
+            <button
+              className="view-toggle"
+              onClick={() => setIsGridView(!isGridView)}
+            >
+              {isGridView ? 'List View' : 'Grid View'}
+            </button>
+            <button
+              className="stock-selector-button"
+              onClick={() => setIsSelectorOpen(true)}
+            >
+              Select Stocks
+            </button>
+          </div>
+        </div>
+
+        <div className={`stock-cards-container ${isGridView ? 'grid-view' : 'list-view'}`}>
+          {!isGridView && (
+            <div className="list-header">
+              <div>Stock</div>
+              <div>Price</div>
+              <div>Change</div>
+              <div>Low</div>
+              <div>High</div>
+            </div>
+          )}
+          {renderStockCards()}
+        </div>
+
+        {isSelectorOpen && (
+          <StockSelectorModal
+            isOpen={isSelectorOpen}
+            onClose={() => setIsSelectorOpen(false)}
+            selectedStocks={selectedStocks}
+            onStocksChange={(newSelectedStocks) => {
+              setSelectedStocks(newSelectedStocks);
+              localStorage.setItem('selectedStocks', JSON.stringify(newSelectedStocks));
+            }}
+          />
+        )}
+      </header>
+    </div>
+  );
+}
 
 const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange }) => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -45,7 +246,10 @@ const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange })
     <div className="stock-selector-modal-overlay">
       <div className="stock-selector-modal">
         <div className="modal-header">
-          <h2>Select Stocks (Max 6)</h2>
+          <h2>Select Stocks</h2>
+          <p className="selection-count">
+            {selectedStocks.length} selected out of 6
+          </p>
           <input
             type="text"
             placeholder="Search stocks..."
@@ -55,20 +259,8 @@ const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange })
           />
         </div>
 
-        <div className="selected-stocks">
-          <h3>Selected Stocks ({selectedStocks.length}/6)</h3>
-          <div className="selected-stocks-grid">
-            {selectedStocks.map(symbol => (
-              <div key={symbol} className="selected-stock-item">
-                <span>{symbol}</span>
-                <button onClick={() => toggleStock(symbol)}>×</button>
-              </div>
-            ))}
-          </div>
-        </div>
-
         <div className="stock-list-container">
-          {filteredStocks.map(stock => (
+          {filteredStocks.map((stock) => (
             <div
               key={stock.symbol}
               className={`stock-list-item ${selectedStocks.includes(stock.symbol) ? 'selected' : ''}`}
@@ -84,351 +276,11 @@ const StockSelectorModal = ({ isOpen, onClose, selectedStocks, onStocksChange })
         </div>
 
         <div className="modal-footer">
-          <button onClick={onClose} className="close-button">Done</button>
+          <button onClick={onClose} className="done-button">Done</button>
         </div>
       </div>
     </div>
   );
 };
 
-function StockList() {
-  const navigate = useNavigate();
-  const [stocksData, setStocksData] = useState({});
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [isSearchVisible, setIsSearchVisible] = useState(false);
-  const [isGridView, setIsGridView] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState('');
-  const [usingCache, setUsingCache] = useState(false);
-  const [isLoadingNews, setIsLoadingNews] = useState(false);
-  const [marketNews, setMarketNews] = useState([]);
-  const [showMarketNews, setShowMarketNews] = useState(false);
-  const searchRef = useRef(null);
-
-  const [selectedStocks, setSelectedStocks] = useState(() => {
-    const saved = localStorage.getItem('selectedStocks');
-    return saved ? JSON.parse(saved) : DEFAULT_SYMBOLS;
-  });
-
-  const [isSelectorOpen, setIsSelectorOpen] = useState(false);
-
-  useEffect(() => {
-    localStorage.setItem('selectedStocks', JSON.stringify(selectedStocks));
-  }, [selectedStocks]);
-
-  const handleSearch = (query) => {
-    if (query.length >= 2) {
-      searchSymbol(query)
-        .then(results => {
-          if (results && results.length > 0) {
-            navigate(`/stock/${results[0].symbol}`);
-          }
-        })
-        .catch(error => {
-          console.error('Search error:', error);
-        });
-    }
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await getStocks(selectedStocks);
-        if (data) {
-          setStocksData(data);
-          const hasCache = Object.values(data).some(stock => stock.fromCache);
-          setUsingCache(hasCache);
-          setLastUpdate(new Date().toLocaleTimeString());
-        }
-      } catch (error) {
-        console.error('Error in fetchData:', error);
-      }
-    };
-
-    fetchData();
-    const interval = setInterval(fetchData, 5000);
-    return () => clearInterval(interval);
-  }, [selectedStocks]);
-
-  const handleStockClick = async (symbol) => {
-    try {
-      const news = await fetchCompanyNews(symbol);
-      const newsArray = Array.isArray(news.data) ? news.data : [];
-      navigate(`/stock/${symbol}`, {
-        state: {
-          newsData: newsArray
-        }
-      });
-    } catch (error) {
-      console.error('Error fetching news:', error);
-      navigate(`/stock/${symbol}`, {
-        state: {
-          newsData: []
-        }
-      });
-    }
-  };
-
-  const handleMarketNewsClick = async () => {
-    setIsLoadingNews(true);
-    try {
-      const response = await fetchMarketNews();
-      setMarketNews(response.data);
-      setShowMarketNews(true);
-    } catch (error) {
-      console.error('Error fetching market news:', error);
-    } finally {
-      setIsLoadingNews(false);
-    }
-  };
-
-  const MarketNewsModel = () => {
-    if (!showMarketNews) return null;
-
-    return (
-      <div className="market-news-modal-overlay">
-        <div className="market-news-modal">
-          <div className="market-news-header">
-            <h2>Market News</h2>
-            <button
-              className="market-news-close"
-              onClick={() => setShowMarketNews(false)}
-            >
-              ×
-            </button>
-          </div>
-          <div className="market-news-container">
-            <div className="market-news-grid">
-              {marketNews.map((news, index) => (
-                <div key={index} className="news-card">
-                  <h4>{news.headline}</h4>
-                  <p>{news.summary}</p>
-                  <div className="news-meta">
-                    <span className="news-date">
-                      {new Date(news.datetime * 1000).toLocaleDateString()}
-                    </span>
-                    <a
-                      href={news.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="read-more"
-                    >
-                      Read More →
-                    </a>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
-
-  useEffect(() => {
-    let lastScrollY = window.scrollY;
-
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-
-      // Hide search when scrolling down, show when scrolling up
-      if (currentScrollY > lastScrollY) {
-        setIsSearchVisible(false);
-      } else {
-        setIsSearchVisible(true);
-      }
-
-      lastScrollY = currentScrollY;
-    };
-
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
-
-  return (
-    <div className="app-container">
-      <PersonalizationButton />
-      <div className={`top-bar ${isSearchVisible ? 'visible' : 'hidden'}`}>
-        <div className="search-wrapper" ref={searchRef}>
-          <button
-            className={`search-icon-button ${isSelectorOpen ? 'active' : ''}`}
-            onClick={() => setIsSelectorOpen(true)}
-          >
-            <svg
-              viewBox="0 0 24 24"
-              width="20"
-              height="20"
-              stroke="currentColor"
-              strokeWidth="2"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      <header className="App-header">
-        <h1>
-          <span onClick={() => window.location.href = "https://shreyask06.github.io/MyWebsite/"}>
-            Stock Market View
-          </span>
-        </h1>
-        <div className="controls">
-          <div className="status-container">
-            <p className="last-update">Last Updated: {lastUpdate}</p>
-          </div>
-          <div className="buttons-container">
-            <button
-              className="market-news-button"
-              onClick={handleMarketNewsClick}
-              disabled={isLoadingNews}
-            >
-              {isLoadingNews ? 'Loading...' : 'Market News'}
-            </button>
-            <button
-              className="view-toggle"
-              onClick={() => setIsGridView(!isGridView)}
-            >
-              {isGridView ? 'List' : 'Grid'}
-            </button>
-          </div>
-        </div>
-
-        <div className={`stocks-container ${isGridView ? 'grid-view' : 'list-view'}`}>
-          {!isGridView && (
-            <div className="list-header">
-              <div className="list-header-company">Company</div>
-              <div className="list-header-price">Price</div>
-              <div className="list-header-change">Change</div>
-              <div className="list-header-high">High</div>
-              <div className="list-header-low">Low</div>
-            </div>
-          )}
-          {stocksData ? (
-            Object.entries(stocksData).map(([symbol, data]) => (
-              <div
-                key={symbol}
-                className="stock-card"
-                onClick={() => handleStockClick(symbol)}
-              >
-                {isGridView ? (
-                  <>
-                    <div className="stock-card-header">
-                      <p className="stock-name">
-                        {stockNames.find(stock => stock.symbol === symbol)?.name || symbol}
-                      </p>
-                      <h2 className="stock-symbol">{symbol}</h2>
-                    </div>
-                    <div className="price-section">
-                      <div className="price-container">
-                        <div className={`price-change ${data.d >= 0 ? 'positive' : 'negative'}`}>
-                          {data.d >= 0 ? '▲' : '▼'} {Math.abs(data.d).toFixed(2)}%
-                        </div>
-                        <p className="current-price">${data.c.toFixed(2)}</p>
-                      </div>
-                    </div>
-                    <div className="price-extremes">
-                      <div className="price-extreme-item">
-                        <span className="extreme-label">Low</span>
-                        <span className="extreme-value">${data.l.toFixed(2)}</span>
-                      </div>
-                      <div className="price-extreme-item">
-                        <span className="extreme-label">High</span>
-                        <span className="extreme-value">${data.h.toFixed(2)}</span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="company-info">
-                      <h2>{stockNames[symbol]}</h2>
-                      <span className="symbol">{symbol}</span>
-                    </div>
-                    <div className="price-section">
-                      ${data.c.toFixed(2)}
-                    </div>
-                    <div className={`change-section ${data.d >= 0 ? 'positive' : 'negative'}`}>
-                      {data.d >= 0 ? '+' : ''}{data.d.toFixed(2)}%
-                    </div>
-                    <div className="high-section">
-                      ${data.h.toFixed(2)}
-                    </div>
-                    <div className="low-section">
-                      ${data.l.toFixed(2)}
-                    </div>
-                  </>
-                )}
-              </div>
-            ))
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
-        <MarketNewsModel />
-      </header>
-      <StockSelectorModal
-        isOpen={isSelectorOpen}
-        onClose={() => {
-          setIsSelectorOpen(false);
-        }}
-        selectedStocks={selectedStocks}
-        onStocksChange={(newSelectedStocks) => {
-          setSelectedStocks(newSelectedStocks);
-          localStorage.setItem('selectedStocks', JSON.stringify(newSelectedStocks));
-          // Immediately fetch data for the new selection
-          getStocks(newSelectedStocks)
-            .then(newData => {
-              setStocksData(newData);
-              setLastUpdate(new Date().toLocaleTimeString());
-            })
-            .catch(error => {
-              console.error('Error updating stocks:', error);
-              setLastUpdate('Update failed');
-            });
-        }}
-      />
-    </div>
-  );
-}
-
 export default StockList;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

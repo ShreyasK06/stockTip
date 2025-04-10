@@ -1,0 +1,119 @@
+.company-overview-container {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  margin-bottom: 1.5rem;
+  transition: all var(--transition-speed) ease;
+  animation: fadeInUp 0.5s 0.6s ease-out forwards;
+  opacity: 0;
+  backdrop-filter: blur(10px);
+}
+
+.company-overview-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.company-overview-header h3 {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.company-overview-content {
+  color: var(--text-secondary);
+}
+
+.company-overview-description {
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.company-overview-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+
+.company-overview-item {
+  background: rgba(var(--primary-color-rgb), 0.08);
+  padding: 1rem;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  transition: all var(--transition-speed) ease;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.company-overview-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.3);
+}
+
+.item-label {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-value {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.company-overview-loading,
+.company-overview-error {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  margin: 1rem 0;
+}
+
+.company-overview-error {
+  color: var(--red);
+  background: rgba(255, 73, 118, 0.1);
+}
+
+@media (max-width: 1200px) {
+  .company-overview-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .company-overview-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .company-overview-grid {
+    grid-template-columns: 1fr;
+  }
+}

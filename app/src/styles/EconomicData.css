@@ -1,0 +1,799 @@
+.economic-data-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+  color: var(--text-primary);
+}
+
+.section-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 2rem 0;
+  padding: 0.5rem;
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+}
+
+.section-nav-item {
+  padding: 0.75rem 1.25rem;
+  margin: 0 0.5rem;
+  border-radius: var(--border-radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.section-nav-item:hover {
+  background: rgba(var(--primary-color-rgb), 0.1);
+  color: var(--primary-color);
+  transform: translateY(-1px);
+}
+
+.section-nav-item.active {
+  background: rgba(var(--primary-color-rgb), 0.15);
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.section-nav-icon {
+  font-size: 1rem;
+}
+
+.section-title {
+  padding-top: 2rem;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+  scroll-margin-top: 5rem;
+}
+
+.back-to-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  margin-top: 1rem;
+  align-self: flex-end;
+}
+
+.back-to-top:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.back-to-top-icon {
+  font-size: 1rem;
+}
+
+/* Economic Section */
+.economic-section {
+  margin-bottom: 2rem;
+}
+
+/* Interest Rates */
+.interest-rates-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.interest-rate-card {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.interest-rate-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary-color-rgb), 0.7),
+    rgba(var(--primary-color-rgb), 0.3)
+  );
+}
+
+.interest-rate-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.rate-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.rate-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.rate-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.rate-change.positive {
+  color: #00f5c0;
+}
+
+.rate-change.negative {
+  color: #ff4976;
+}
+
+.rate-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* CPI Styles */
+.cpi-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.cpi-chart {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  height: 300px;
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  overflow: hidden;
+}
+
+.cpi-chart::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary-color-rgb), 0.7),
+    rgba(var(--primary-color-rgb), 0.3)
+  );
+}
+
+.chart-placeholder {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-bar {
+  width: 12%;
+  background: rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: rgba(var(--primary-color-rgb), 0.5);
+}
+
+.chart-bar.active {
+  background: var(--primary-color);
+}
+
+.chart-bar span {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cpi-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.cpi-stat {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cpi-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary-color-rgb), 0.7),
+    rgba(var(--primary-color-rgb), 0.3)
+  );
+}
+
+.cpi-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-value.negative {
+  color: #ff4976;
+}
+
+.stat-value.positive {
+  color: #00f5c0;
+}
+
+/* Oil Prices */
+.oil-prices-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.oil-price-card {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.08),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.oil-price-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    rgba(var(--primary-color-rgb), 0.7),
+    rgba(var(--primary-color-rgb), 0.3)
+  );
+}
+
+.oil-price-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.oil-type {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.oil-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.oil-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.oil-change.positive {
+  color: #00f5c0;
+}
+
+.oil-change.negative {
+  color: #ff4976;
+}
+
+.oil-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+@media (max-width: 768px) {
+  .cpi-container {
+    grid-template-columns: 1fr;
+  }
+
+  .interest-rates-container,
+  .oil-prices-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Economic Indicator Header */
+.economic-indicator-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  padding-bottom: 0.75rem;
+}
+
+.economic-indicator-header h3 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.indicator-icon {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+}
+
+/* Interest Rates */
+.interest-rates-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.interest-rate-card {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.interest-rate-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.rate-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.rate-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.rate-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.rate-change.positive {
+  color: #00f5c0;
+}
+
+.rate-change.negative {
+  color: #ff4976;
+}
+
+.rate-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* CPI Styles */
+.cpi-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.cpi-chart {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  height: 300px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.chart-placeholder {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+  height: 100%;
+}
+
+.chart-bar {
+  width: 12%;
+  background: rgba(var(--primary-color-rgb), 0.3);
+  border-radius: 4px 4px 0 0;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.chart-bar:hover {
+  background: rgba(var(--primary-color-rgb), 0.5);
+}
+
+.chart-bar.active {
+  background: var(--primary-color);
+}
+
+.chart-bar span {
+  position: absolute;
+  bottom: -25px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.cpi-details {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.cpi-stat {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.cpi-stat:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.5rem;
+}
+
+.stat-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.stat-value.negative {
+  color: #ff4976;
+}
+
+.stat-value.positive {
+  color: #00f5c0;
+}
+
+/* Oil Prices */
+.oil-prices-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.oil-price-card {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.oil-price-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.oil-type {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 0.75rem;
+}
+
+.oil-price {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.75rem;
+}
+
+.oil-change {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.oil-change.positive {
+  color: #00f5c0;
+}
+
+.oil-change.negative {
+  color: #ff4976;
+}
+
+.oil-date {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+/* Market News */
+.market-news-container {
+  margin-bottom: 1.5rem;
+}
+
+.news-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.news-item {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--primary-color-rgb), 0.1);
+  transition: all 0.3s ease;
+}
+
+.news-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  border-color: rgba(var(--primary-color-rgb), 0.2);
+}
+
+.news-item h4 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+}
+
+.news-item p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  margin: 0 0 1rem 0;
+  line-height: 1.5;
+}
+
+.news-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.news-item a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.news-item a:hover {
+  text-decoration: underline;
+}
+
+.loading-news,
+.no-news {
+  padding: 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: var(--border-radius);
+}
+
+/* Scrollbar styling */
+.news-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.news-list::-webkit-scrollbar-track {
+  background: rgba(var(--primary-color-rgb), 0.05);
+  border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb {
+  background: rgba(var(--primary-color-rgb), 0.2);
+  border-radius: 3px;
+}
+
+.news-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(var(--primary-color-rgb), 0.3);
+}
+
+.economic-data-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 2rem;
+}
+
+.header-content {
+  text-align: center;
+  flex: 1;
+}
+
+.economic-data-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+  text-shadow: 0 2px 4px var(--shadow-color);
+  letter-spacing: -0.02em;
+}
+
+.economic-data-header p {
+  font-size: 1.2rem;
+  color: var(--text-secondary);
+  margin: 0.5rem 0 0;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background: rgba(var(--primary-color-rgb), 0.1);
+  border: 1px solid rgba(var(--primary-color-rgb), 0.2);
+  border-radius: var(--border-radius);
+  color: var(--text-primary);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+}
+
+.back-button:hover {
+  background: var(--accent-color);
+  color: white;
+  transform: translateX(-2px);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.3);
+}
+
+.economic-data-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.economic-section,
+.crypto-section {
+  margin-bottom: 2rem;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.section-header h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+.section-icon {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .economic-data-container {
+    padding: 1rem;
+  }
+
+  .economic-data-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .back-button {
+    align-self: flex-start;
+  }
+
+  .economic-data-header h1 {
+    font-size: 2rem;
+  }
+}

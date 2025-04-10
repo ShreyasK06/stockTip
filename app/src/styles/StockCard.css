@@ -1,0 +1,87 @@
+/* Base Card Styles */
+.stock-card {
+  background: linear-gradient(
+    165deg,
+    rgba(var(--primary-color-rgb), 0.05),
+    rgba(var(--primary-color-rgb), 0.02)
+  );
+  border: 1px solid rgba(var(--primary-color-rgb), 0.15);
+  color: var(--text-primary);
+  border-radius: 16px;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.2, 0, 0.2, 1);
+  backdrop-filter: blur(10px);
+}
+
+.stock-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(var(--primary-color-rgb), 0.1),
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.stock-card:hover::before {
+  opacity: 1;
+}
+
+.stock-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(var(--primary-color-rgb), 0.3);
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.1),
+    0 2px 8px rgba(var(--primary-color-rgb), 0.2);
+}
+
+/* Company Info Styles - Shared */
+.company-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.company-name {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+/* Price Change Styles */
+.price-change {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.price-change.positive {
+  background: rgba(0, 245, 192, 0.1);
+  color: #00f5c0;
+}
+
+.price-change.negative {
+  background: rgba(255, 73, 118, 0.1);
+  color: #ff4976;
+}
+
+/* Theme Variations */
+.light-theme .stock-card {
+  background: linear-gradient(165deg, 
+    rgba(255, 255, 255, 0.95),
+    rgba(240, 240, 240, 0.9)
+  );
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 
+    0 10px 30px rgba(0, 0, 0, 0.08),
+    inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}

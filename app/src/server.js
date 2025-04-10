@@ -217,7 +217,7 @@ const getStocks = async (symbols = []) => {
   }
 };
 
-const getAIAnalysis = async (symbol, question = '') => {
+const getAIAnalysis = async (symbol) => {
   if (!hasValidConfig()) {
     throw new Error('API keys not configured. Please check your environment variables.');
   }
@@ -227,11 +227,11 @@ const getAIAnalysis = async (symbol, question = '') => {
       messages: [
         {
           role: "system",
-          content: "You are a helpful AI assistant that provides stock market analysis and investment advice."
+          content: "Look at recent stock data of a stock that I provide and give me an analysis on its recent prices and why this is happening, make it in paragraph form"
         },
         {
           role: "user",
-          content: `Analyze the stock ${symbol}. ${question}`
+          content: `Analyze the stock ${symbol}.`
         }
       ],
       model: "gpt-3.5-turbo",

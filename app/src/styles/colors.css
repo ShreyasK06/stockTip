@@ -1,0 +1,88 @@
+:root {
+  /* Theme Colors - Blue */
+  --blue-light-100: #e6f3ff;
+  --blue-light-300: #90cdf4;
+  --blue-light-500: #4299e1;
+  --blue-dark-100: #1a365d;
+  --blue-dark-300: #2b4c74;
+  --blue-dark-500: #1e3a8a;
+
+  /* Theme Colors - Green */
+  --green-light-100: #e6ffea;
+  --green-light-300: #9ae6b4;
+  --green-light-500: #48bb78;
+  --green-dark-100: #1c4532;
+  --green-dark-300: #276749;
+  --green-dark-500: #1a4731;
+
+  /* Theme Colors - Red */
+  --red-light-100: #fff5f5;
+  --red-light-300: #fc8181;
+  --red-light-500: #f56565;
+  --red-dark-100: #742a2a;
+  --red-dark-300: #9b2c2c;
+  --red-dark-500: #63171b;
+
+  /* Theme Colors - Yellow */
+  --yellow-light-100: #fffff0;
+  --yellow-light-300: #faf089;
+  --yellow-light-500: #ecc94b;
+  --yellow-dark-100: #744210;
+  --yellow-dark-300: #975a16;
+  --yellow-dark-500: #5f370e;
+
+  /* Neutral Colors - Light Theme */
+  --light-neutral-100: #ffffff;
+  --light-neutral-300: #f7fafc;
+  --light-neutral-500: #e2e8f0;
+  --light-neutral-700: #a0aec0;
+  --light-neutral-900: #1a202c;
+
+  /* Neutral Colors - Dark Theme */
+  --dark-neutral-100: #2d3748;
+  --dark-neutral-300: #1a202c;
+  --dark-neutral-500: #171923;
+  --dark-neutral-700: #0d1117;
+  --dark-neutral-900: #000000;
+
+  /* RGB values for gradients and opacity */
+  --blue-light-rgb: 66, 153, 225;
+  --green-light-rgb: 72, 187, 120;
+  --red-light-rgb: 245, 101, 101;
+  --primary-color-rgb: 66, 153, 225;
+
+  /* Light Theme Defaults */
+  --primary-color: var(--blue-light-500);
+  --primary-light: var(--blue-light-300);
+  --primary-dark: var(--blue-dark-500);
+
+  --background-primary: var(--light-neutral-100);
+  --background-secondary: var(--light-neutral-300);
+  --background-tertiary: var(--light-neutral-500);
+
+  --text-primary: var(--light-neutral-900);
+  --text-secondary: var(--light-neutral-700);
+  --text-tertiary: var(--light-neutral-500);
+
+  --border-color: var(--light-neutral-500);
+  --shadow-color: rgba(0, 0, 0, 0.1);
+  --card-shadow: 0 4px 6px var(--shadow-color);
+  --transition-speed: 0.3s;
+}
+
+[data-theme="dark"] {
+  --primary-color: var(--blue-light-300);
+  --primary-light: var(--blue-light-100);
+  --primary-dark: var(--blue-dark-300);
+
+  --background-primary: var(--dark-neutral-500);
+  --background-secondary: var(--dark-neutral-300);
+  --background-tertiary: var(--dark-neutral-100);
+
+  --text-primary: var(--light-neutral-100);
+  --text-secondary: var(--light-neutral-300);
+  --text-tertiary: var(--light-neutral-500);
+
+  --border-color: var(--dark-neutral-100);
+  --shadow-color: rgba(0, 0, 0, 0.3);
+}
