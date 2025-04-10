@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import {
   getRealGDP,
   getRealGDPPerCapita,
@@ -17,41 +17,45 @@ const EconomicIndicators = () => {
   const [error, setError] = useState(null);
 
   // Mock data for when API fails
-  const mockGdpData = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mockGdpData = useMemo(() => ({
     data: [
       { date: '2023-06-30', value: '23819.982' },
       { date: '2023-03-31', value: '23249.818' },
       { date: '2022-12-31', value: '22998.461' },
       { date: '2022-09-30', value: '22900.522' }
     ]
-  };
+  }), []);
 
-  const mockGdpPerCapitaData = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mockGdpPerCapitaData = useMemo(() => ({
     data: [
       { date: '2022-12-31', value: '69287.54' },
       { date: '2021-12-31', value: '67631.32' },
       { date: '2020-12-31', value: '63209.66' },
       { date: '2019-12-31', value: '65279.53' }
     ]
-  };
+  }), []);
 
-  const mockInflationData = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mockInflationData = useMemo(() => ({
     data: [
       { date: '2023-07-31', value: '3.2' },
       { date: '2023-06-30', value: '3.0' },
       { date: '2023-05-31', value: '4.0' },
       { date: '2023-04-30', value: '4.9' }
     ]
-  };
+  }), []);
 
-  const mockUnemploymentData = {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const mockUnemploymentData = useMemo(() => ({
     data: [
       { date: '2023-07-31', value: '3.5' },
       { date: '2023-06-30', value: '3.6' },
       { date: '2023-05-31', value: '3.7' },
       { date: '2023-04-30', value: '3.4' }
     ]
-  };
+  }), []);
 
   useEffect(() => {
     const fetchEconomicData = async () => {

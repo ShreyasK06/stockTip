@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 // No need for navigation or icons for now
 import '../styles/CryptoCard.css';
 
@@ -52,7 +52,8 @@ const CryptoList = () => {
   }, [selectedCryptos]);
 
   // Function to generate mock crypto data
-  const generateMockCryptoData = () => {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const generateMockCryptoData = useCallback(() => {
     const results = {};
 
     selectedCryptos.forEach(symbol => {
@@ -90,7 +91,7 @@ const CryptoList = () => {
     });
 
     return results;
-  };
+  }, [selectedCryptos, cryptoList]);
 
   useEffect(() => {
     const fetchCryptoData = async () => {
