@@ -95,7 +95,7 @@ const EconomicIndicators = () => {
     };
 
     fetchEconomicData();
-  }, []);
+  }, [mockGdpData, mockGdpPerCapitaData, mockInflationData, mockUnemploymentData]);
 
   if (loading) {
     return <div className="economic-loading">Loading economic indicators...</div>;

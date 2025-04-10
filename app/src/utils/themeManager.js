@@ -1,7 +1,8 @@
-export const updateTheme = (color, isDarkMode) => {
+export const updateTheme = (_, isDarkMode) => { // Using _ to indicate unused parameter
   const root = document.documentElement;
-  const theme = isDarkMode ? 'dark' : 'light';
-  
+  // Set theme attribute on document
+  document.documentElement.setAttribute('data-theme', isDarkMode ? 'dark' : 'light');
+
   // Set primary color (keeping blue as default)
   root.style.setProperty('--primary-color-rgb', '66, 153, 225');
 
@@ -21,8 +22,8 @@ export const updateTheme = (color, isDarkMode) => {
   }
 
   // Dispatch theme change event
-  window.dispatchEvent(new CustomEvent('themechange', { 
-    detail: { isDarkMode } 
+  window.dispatchEvent(new CustomEvent('themechange', {
+    detail: { isDarkMode }
   }));
 };
 

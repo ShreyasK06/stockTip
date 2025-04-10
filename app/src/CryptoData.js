@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaBitcoin, FaNewspaper, FaChartLine } from 'react-icons/fa';
+import { FaArrowLeft, FaNewspaper, FaChartLine } from 'react-icons/fa';
 import CryptoList from './components/CryptoList';
 import { ThemeContext } from './App';
 import './styles/CryptoData.css';
@@ -90,17 +90,17 @@ function CryptoData() {
             <div className="news-item">
               <h4>Bitcoin Surges Past $60,000 as Institutional Interest Grows</h4>
               <p>Bitcoin has surged past $60,000 as institutional investors continue to show interest in the cryptocurrency. The move comes as more companies add Bitcoin to their balance sheets.</p>
-              <a href="#">Read more</a>
+              <button className="read-more-btn">Read more</button>
             </div>
             <div className="news-item">
               <h4>Ethereum 2.0 Upgrade on Track for Q3 Completion</h4>
               <p>The Ethereum 2.0 upgrade is on track for completion in Q3, according to developers. The upgrade will move Ethereum from proof-of-work to proof-of-stake, significantly reducing energy consumption.</p>
-              <a href="#">Read more</a>
+              <button className="read-more-btn">Read more</button>
             </div>
             <div className="news-item">
               <h4>Regulatory Clarity Coming for Cryptocurrencies, Says SEC Chair</h4>
               <p>The SEC Chair has indicated that regulatory clarity for cryptocurrencies is coming soon. This could provide a clearer framework for crypto companies to operate within.</p>
-              <a href="#">Read more</a>
+              <button className="read-more-btn">Read more</button>
             </div>
           </div>
           <button onClick={() => scrollToSection('top')} className="back-to-top">

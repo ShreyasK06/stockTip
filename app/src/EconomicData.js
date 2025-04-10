@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft, FaChartLine, FaMoneyBillWave, FaOilCan, FaNewspaper, FaPercentage, FaChartBar, FaFireAlt, FaUserTie } from 'react-icons/fa';
+import { FaArrowLeft, FaMoneyBillWave, FaOilCan, FaNewspaper, FaPercentage } from 'react-icons/fa';
 import EconomicIndicators from './components/EconomicIndicators';
 import { fetchMarketNews } from './server';
 import { ThemeContext } from './App';

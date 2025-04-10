@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaBitcoin, FaEthereum, FaChartLine } from 'react-icons/fa';
+// No need for navigation or icons for now
 import '../styles/CryptoCard.css';
 
 // Mock function for getCryptoExchangeRate if the real one is not available
@@ -37,7 +36,7 @@ const cryptoList = [
 ];
 
 const CryptoList = () => {
-  const navigate = useNavigate();
+  // No need for navigation for now
   const [cryptoData, setCryptoData] = useState({});
   const [isGridView, setIsGridView] = useState(true);
   const [lastUpdate, setLastUpdate] = useState('');
@@ -150,7 +149,7 @@ const CryptoList = () => {
     const interval = setInterval(fetchCryptoData, 60000);
 
     return () => clearInterval(interval);
-  }, [selectedCryptos]);
+  }, [selectedCryptos, generateMockCryptoData]);
 
   const handleCryptoClick = (symbol) => {
     // Navigate to a detailed view if needed
